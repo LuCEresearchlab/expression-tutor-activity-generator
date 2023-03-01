@@ -1,0 +1,37 @@
+name: 'Expression Tutor Activity generation'
+description: 'Generate activities from source code'
+branding:
+  icon: circle
+  color: gray-dark
+inputs:
+  query:
+    description: 'ETL Query'
+    required: true
+  count:
+    description: 'Number of expressions to extract'
+    required: true
+  srcDir:
+    description: 'Sources directory'
+    required: true
+  javaClassPath:
+    description: 'Additional (Java) ClassPath entries for project analysis'
+    required: false
+  activityGroup:
+    description: 'Activity Group key'
+    required: true
+  ghToken:
+    description: 'GitHub token used to create the issue (e.g. secrets.GITHUB_TOKEN)'
+    required: true
+#outputs:
+#  expressions:
+#    description: 'The expressions that were found'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.query }}
+    - ${{ inputs.count }}
+    - ${{ inputs.srcDir }}
+    - ${{ inputs.javaClassPath }}
+    - ${{ inputs.activityGroup }}
+    - ${{ inputs.ghToken }}
