@@ -15,6 +15,7 @@ on:
 
 permissions:
   issues: write
+  contents: read
 
 jobs:
   et_activity_generation:

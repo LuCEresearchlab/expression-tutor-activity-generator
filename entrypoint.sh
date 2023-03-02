@@ -12,7 +12,7 @@ WS_DIR="/github/workspace"
 ES_INPUT_DIR="$WS_DIR/$ARG_SRC_DIR"
 ES_JAVA_CLASSPATH="$WS_DIR/$ARG_JAVA_CLASSPATH"
 
-OUT_DIR="$WS_DIR/.exprs"
+OUT_DIR="$WS_DIR/output-exps"
 ES_OUT_FILE="$OUT_DIR/activities.ndjson"
 
 
@@ -62,8 +62,8 @@ $expression_code
 
 ${gh_url}
 
-As we have seen in class, the structure of this expression forms a tree.
-Please draw the structure of this expression using expression tutor by following
+As we have seen in class, the structure of an expression forms a tree.
+Please draw the structure of this expression using Expression Tutor by following
 [this link](${et_url}).
 
 Once you are done, click the Save button and paste the link as a comment to this issue.
