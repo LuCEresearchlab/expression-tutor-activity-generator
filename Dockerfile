@@ -1,5 +1,5 @@
 # TODO: change this and use proper versioning
-FROM herrdermails/expression-service
+FROM herrdermails/expression-service:1.0.0
 
 RUN apt-get update
 RUN apt-get install -y jq
