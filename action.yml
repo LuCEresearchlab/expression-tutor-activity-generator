@@ -1,4 +1,4 @@
-name: 'Expression Tutor Activity generation'
+name: 'Expression Tutor Activity Generator'
 description: 'Generate activities from source code'
 branding:
   icon: circle
