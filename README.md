@@ -30,10 +30,9 @@ jobs:
         uses: LuCEresearchlab/expression-tutor-activity-generator@v1.0.0
         id: exps
         with:
-          query: '(/.*/ "(" [_ ","]* _ ")")'
           count: '1'
           srcDir: '.'
-          activityGroup: 'my-activity-group'
+          activityGroup: 'my-activity-group-uuid'
           javaClassPath: '+libs'
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 ```

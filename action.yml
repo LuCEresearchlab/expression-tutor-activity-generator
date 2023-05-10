@@ -4,9 +4,6 @@ branding:
   icon: circle
   color: gray-dark
 inputs:
-  query:
-    description: 'ETL Query'
-    required: true
   count:
     description: 'Number of expressions to extract'
     required: true
@@ -29,7 +26,6 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.query }}
     - ${{ inputs.count }}
     - ${{ inputs.srcDir }}
     - ${{ inputs.javaClassPath }}
