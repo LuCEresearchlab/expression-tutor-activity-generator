@@ -30,8 +30,13 @@ if [ -z "$ARG_ACTIVITY_GROUP" ]; then
     --java-classpath="$ES_JAVA_CLASSPATH" \
     "$ES_INPUT_DIR" > "$ES_OUT_FILE"
 else
-  curl -s -X GET "$ET_URL/api/activities/group/$ARG_ACTIVITY_GROUP" > "$GROUP_INFO_FILE"
+  curl --fail -s -X GET "$ET_URL/api/activities/group/$ARG_ACTIVITY_GROUP" > "$GROUP_INFO_FILE"
+  echo "$(cat $GROUP_INFO_FILE)" 1>&2
   ETL_QUERY="$(cat "$GROUP_INFO_FILE" | jq '.query' | sed 's/\\"/"/g' | sed 's/^"//' | sed 's/"$//')"
+  if [ "$ETL_QUERY" == "null" ] || [ "$ETL_QUERY" == "" ]; then
+    echo "Could not read query from Activity Group $ARG_ACTIVITY_GROUP" 1>&2
+    exit 2
+  fi
   java -jar /opt/expression-service/app.jar source \
     --format=ACTIVITY \
     --count="$ARG_COUNT" \
@@ -42,14 +47,14 @@ fi
 
 
 if [ ! -r "$ES_OUT_FILE" ]; then
-  echo "Error: \"$ES_OUT_FILE\" is not a readable file" 2>&1
+  echo "Error: \"$ES_OUT_FILE\" is not a readable file" 1>&2
   exit 2
 fi
 
 # Invoke the "lucky API" to generate an activity
 CREATE_URL="${ET_URL}/api/activities/lucky?group=${ARG_ACTIVITY_GROUP}"
 while read -r line; do
-  CREATE_RES=$(curl -s -X POST "$CREATE_URL" -d "$line" -H "Content-Type: application/json")
+  CREATE_RES=$(curl --fail -s -X POST "$CREATE_URL" -d "$line" -H "Content-Type: application/json")
   if [[ "$(echo "$CREATE_RES" | jq -r ".success")" == "true" ]]; then
     UUID=$(echo "$CREATE_RES" | jq -r ".uuid")
 
@@ -83,7 +88,7 @@ EOB
 
     if [ ! -z "$ARG_GH_TOKEN" ]; then
       # Create issue
-      curl -X POST \
+      curl --fail -X POST \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer $ARG_GH_TOKEN" \
         -H "Content-Type: application/json" \
@@ -91,7 +96,7 @@ EOB
         -d "$ISSUE"
     fi
   else
-    echo "Activity creation failed for $line" 2>&1
+    echo "Activity creation failed for $line" 1>&2
   fi
 done < "$ES_OUT_FILE"
 
